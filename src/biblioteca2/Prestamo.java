@@ -20,7 +20,7 @@ public class Prestamo implements java.io.Serializable {
 	
 	@Override
 	public String toString() {
-		return "Prestamo [idPrestamo=" + idPrestamo + ", libro=" + libro + ", usuario=" + usuario + ", data=" + data
+		return "Prestamo [idPrestamo=" + idPrestamo + ", libro=" + libro  + ", data=" + data
 				+ ", devolto=" + devolto + "]";
 	}
 

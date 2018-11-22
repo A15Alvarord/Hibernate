@@ -2,6 +2,7 @@ package biblioteca2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -34,27 +35,41 @@ public class OperacionsUsuarios {
 		List<Usuario> lista = new ArrayList<>();
 		Query consulta = sesion.createQuery("from Usuario");
 		lista = consulta.list();
+		for(Usuario us : lista) {
+			System.out.println(us);
+			Set<Prestamo> pres = us.getPrestamos();
+			if(!pres.isEmpty()) {
+				for(Prestamo p : pres) {
+					System.out.println(p);
+				}	
+			}
+			
+		}
 		return lista;
 	}
-	public void modificarUsuario(int id)throws Exception{
+	public int modificarUsuario(int id)throws Exception{
+		int result;
 		Transaction tr = sesion.beginTransaction();
 		Query modificar = sesion.createQuery("update Usuario set dni = ?, nome = ?, correoe = ? where idUsuario = ?");
 		modificar.setString(0, "3");
 		modificar.setString(1, "proba");
 		modificar.setString(2, "correo");
 		modificar.setInteger(3, id);
-		modificar.executeUpdate();
+		
+		result = modificar.executeUpdate();
 		tr.commit();
+		return result;
 		
 	}
 	public int borraUsuario(int id) throws Exception{
-		Transaction tr = sesion.beginTransaction();
+		
 		Query borrar = sesion.createQuery("delete from Usuario where idUsuario=?");
 		borrar.setInteger(0,  id);
 		Usuario comprobarUsuario = consultaUsuario(id);
 		int resultado = 0;
 		//Comprobamos si tiene prestamos ese Usuario
 		if(comprobarUsuario.getPrestamos().isEmpty()) {
+			Transaction tr = sesion.beginTransaction();
 			resultado = borrar.executeUpdate();
 			tr.commit();
 		}
